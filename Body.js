@@ -8,7 +8,7 @@ const Body = () => {
   const [labelText,setLabelText]=useState(""); // to update the input text labels entered.
   const [labelTextArea,setLabelTextArea]=useState(""); // to update the text area labels entered.
   const [itemIndex,setItemIndex]=useState(null);
-  const [alignment,setAlignment]  = useState("left");
+  const [alignment,setAlignment]  = useState("");
 
   const handleDragStart = (e, item) => {
     const data = JSON.stringify({ item }); //to pass data as array to the below syntax you need to stringify it first.
@@ -29,7 +29,7 @@ const Body = () => {
     e.preventDefault();
     const droppedItems = e.dataTransfer.getData('text'); // Retrieving data after you drop.
     const { item } = JSON.parse(droppedItems); // since we stringyfied the data above we need to parse the droppedItems JSON to extract the item
-    const updatedDroppedItems = [...dragTile, { item ,label:'', alignment}]; //using a spread operator to create a copy of the array as it doesnot update the array directly.
+    const updatedDroppedItems = [...dragTile, { item ,label:'',  alignment: ''}]; //using a spread operator to create a copy of the array as it doesnot update the array directly.
     setDragTile(updatedDroppedItems);
     console.log("Dropped", item);
     setDragged(true); // Update state to show label input.
@@ -45,12 +45,13 @@ const Body = () => {
   }
   const handleLabelSave=()=>{
     setDragTile(prevTiles => {
+      // Update the label for the item at the specified index.
       const updatedTiles = [...prevTiles];
       if(draggedItem === "Text field"){
-      updatedTiles[itemIndex] = { ...updatedTiles[itemIndex], label: labelText };
+      updatedTiles[itemIndex] = { ...updatedTiles[itemIndex], label: labelText ,alignment:'' };
       }
       else if(draggedItem === "Text Area"){
-        updatedTiles[itemIndex] = { ...updatedTiles[itemIndex], label: labelTextArea };
+        updatedTiles[itemIndex] = { ...updatedTiles[itemIndex], label: labelTextArea ,alignment:'' };
         console.log("txt area label", labelTextArea);
       }
       return updatedTiles;
@@ -60,19 +61,29 @@ const Body = () => {
     setItemIndex(null);
   }
   const handleAlignmentChange = (newAlignment) => {
-    setAlignment(newAlignment); 
+    // setAlignment(newAlignment); // Update the alignment state
+    setAlignment(newAlignment);
     console.log("align",newAlignment);
     setDragTile((prevTiles) => {
       const updatedTiles = [...prevTiles];
       if (itemIndex !== null) {
-          updatedTiles[itemIndex]=  { ...updatedTiles[itemIndex], alignment: newAlignment }; 
+        if(draggedItem ==="Text field"){
+          updatedTiles[itemIndex]=  { ...updatedTiles[itemIndex] ,label:labelText,alignment:newAlignment};
+         } // Update alignment for the correct item
+         else if(draggedItem ==="Text Area"){
+          updatedTiles[itemIndex]=  { ...updatedTiles[itemIndex] ,label:labelTextArea,alignment:newAlignment};
+         }
       }
+      console.log("alignment tiles",updatedTiles);
       return updatedTiles;
   });
+  setItemIndex(null);
   };
 
 
+
   return (
+    // <AlignmentProvider value={{alignment, setAlignment}}>
     <div className="flex">
       <div className="w-[25%] py-4">
         <div className="flex justify-center h-16 px-2 py-2">
@@ -102,10 +113,10 @@ const Body = () => {
       </div>
       <div className="w-[50%] p-4 flex-wrap flex justify-center" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e)}>
         {dragTile.map((item, index) => ( // iterating over the dragged items and displaying them.
-          <div key={index} style={{ textAlign: item.alignment }}>
+          <div key={index} style={{ display: 'flex', justifyContent: item.alignment, width: '100%' }}>
             {item.item === 'Text field' && (
-              <div className="m-4 p-4 flex" >
-              <span className="flex" style={{ minWidth: '100px'}}>
+              <div className="m-4 p-4 flex">
+              <span className="flex" style={{ minWidth: '100px'}}> 
                 <label>{item.label}</label>
               </span>
               <input
@@ -150,6 +161,7 @@ const Body = () => {
         </div>
       </div>
     </div>
+    /* </AlignmentProvider> */
   );
 };
 
