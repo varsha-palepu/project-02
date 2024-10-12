@@ -12,36 +12,43 @@ const ElementAlignment = ({handleAlignmentChange})=>{
         </MenuButton>
       </div>
 
-      <MenuItems
+      <Menu.Items
         transition
         className="absolute z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
       >
         <div className="py-1">
-          <MenuItem>
-            <div className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900" onClick={() => handleAlignmentChange("left")}>
-              Left
-            </div>
-          </MenuItem>
-          <MenuItem>
-            <div
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900" onClick={() => handleAlignmentChange("right")}>
-              Right
-            </div>
-          </MenuItem>
-          <MenuItem>
-            <div
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900" onClick={() => handleAlignmentChange("center")}>
-              Center
-            </div>
-          </MenuItem>
-          <MenuItem>
-            <div
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900" onClick={() => handleAlignmentChange("justify")}>
-              Justify
-            </div>
-          </MenuItem>
-        </div>
-      </MenuItems>
+                        <MenuItem>
+                            {({ active }) => (
+                                <div
+                                    className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100 text-gray-900' : ''}`}
+                                    onClick={() => handleAlignmentChange("flex-start")}
+                                >
+                                    Right
+                                </div>
+                            )}
+                        </MenuItem>
+                        <MenuItem>
+                            {({ active }) => (
+                                <div
+                                    className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100 text-gray-900' : ''}`}
+                                    onClick={() => handleAlignmentChange("center")}
+                                >
+                                    Center
+                                </div>
+                            )}
+                        </MenuItem>
+                        <MenuItem>
+                            {({ active }) => (
+                                <div
+                                    className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100 text-gray-900' : ''}`}
+                                    onClick={() => handleAlignmentChange("flex-end")}
+                                >
+                                    Left
+                                </div>
+                            )}
+                        </MenuItem>
+                    </div>
+      </Menu.Items>
     </Menu>
         </div>
     )
